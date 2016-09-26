@@ -39,7 +39,7 @@ void logStr(char *str)
 
 int startServer()
 {
-	//daemon
+	/*//daemon
 	pid_t pid, sid;
 	pid = fork();
 	if (pid != 0) {
@@ -48,11 +48,11 @@ int startServer()
 	sid = setsid();
 	if (sid < 0) {
 		exit(EXIT_FAILURE);
-	}
+	}*/
 
 	//listen for incomming connections
 	listenSocketServer();
-	return 1;
+	return 0;
 }
 
 char *packFrame(char *msg)
@@ -137,26 +137,23 @@ void* clientMain(void *arg)
 			replace((char*)outBuffer, len, '>', ' ');
 
 			json_object *json = json_tokener_parse((char*)outBuffer);
-			char *nick;
 			char *msg;
 			json_object_object_foreach(json, key, val)
 			{
 				const char *v = json_object_get_string(val);
-				if (strcmp(key, "nick") == 0) {
-					nick = malloc(strlen(v) + 1);
-					strcpy(nick, v);
-					nick[strlen(v)] = '\0';
-				}
-				else if (strcmp(key, "msg") == 0) {
+				if (strcmp(key, "msg") == 0) {
 					msg = malloc(strlen(v) + 1);
 					strcpy(msg, v);
 					msg[strlen(v)] = '\0';
 				}
 			}
 			json_object_put(json);
-			char *ip = user->ip;
 
+			printf("%d\n", strlen(msg));
 			logStr(msg);
+
+			free(msg);
+			free(outBuffer);
 
 			/*struct BccMessage *bccMsg = createMessage(nick, ip, msg);
 			if (bccMsg == NULL) { logStr("ERROR parsing msg"); continue; }
