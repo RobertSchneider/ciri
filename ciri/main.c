@@ -4,9 +4,10 @@
 #include <pthread.h>
 #include "globals.h"
 #include "command.h"
-#import "cmdMgr.h"
+#include "main.h"
+#include "cmdMgr.h"
 
-#import "server.h"
+#include "server.h"
 
 int nextOneFree = 0;
 
@@ -53,7 +54,7 @@ void handleCommand(char *cmd) {
 }
 
 void *listenThread(void* arg) {
-    while(1) {
+    /*while(1) {
         char buffer[MAX_OUTBUT_BUFFER];
         runCmd("python listen_mic.py", buffer, MAX_OUTBUT_BUFFER, CMD_TYPE_SUBMODULE);
         int len = (int)strlen(buffer);
@@ -63,13 +64,12 @@ void *listenThread(void* arg) {
         printf("[CMD] recognized %s\n", buffer);
         handleCommand(buffer);
         buffer[0] = '\0';
-    }
+    }*/
+	startServer();
 }
 
 int main(void) {
     LOG_INFO("**CIRI STARTED**");
-    
-	startServer();
 
     cmdMgrLoadCommands();
     

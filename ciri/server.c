@@ -150,6 +150,7 @@ void* clientMain(void *arg)
 			json_object_put(json);
 
 			printf("%d\n", strlen(msg));
+			handleCommand(msg);
 			logStr(msg);
 
 			free(msg);
